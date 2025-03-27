@@ -1,0 +1,14 @@
+app:
+  name: "support-system"
+  version: "0.0.1"
+  log_level: "debug"
+http:
+  addr: "${APPLICATION_HTTP_HOST}"
+  port: "${APPLICATION_HTTP_PORT}"
+mongo:
+  user: "${MONGO_INITDB_ROOT_USERNAME}"
+  password: "${MONGO_INITDB_ROOT_PASSWORD}"
+  host: "${MONGO_HOST}"
+  port: "${MONGO_PORT}"
+  database: "${MONGO_INITDB_DATABASE}"
+  migrations_path: "file://config/mongo/migrations"
