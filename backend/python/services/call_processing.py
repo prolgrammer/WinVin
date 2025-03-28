@@ -1,6 +1,6 @@
 import uuid
 
-from backend.python.models import CallMetadata
+from ..models import CallMetadata
 from database import db
 import httpx
 from fastapi import HTTPException
