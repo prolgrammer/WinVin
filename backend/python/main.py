@@ -60,4 +60,4 @@ async def get_recommendations(manager_id: str):
 if __name__ == "__main__":
     run_migration()
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=808-0)
+    uvicorn.run(app, host="0.0.0.0", port=8080)

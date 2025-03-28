@@ -105,5 +105,3 @@ else:
 print(f"Operators count: {operators_collection.count_documents({})}")
 print(f"Calls count: {calls_collection.count_documents({})}")
 
-# Закрытие соединения
-client.close()

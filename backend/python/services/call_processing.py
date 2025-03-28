@@ -1,9 +1,10 @@
 import uuid
 
-from ..models import CallMetadata
-from database import db
 import httpx
 from fastapi import HTTPException
+
+from migrate import db
+from models import CallMetadata
 
 
 class CallProcessingService:
@@ -25,7 +26,7 @@ class CallProcessingService:
                                                                            "isoformat") else metadata.call_date
                 }
                 response = await client.post(
-                    f"{self.analytics_service_url}/analyze_call",
+                    f"{self.analytics_service_url}/analyze",
                     files=files,
                     data=data
                 )

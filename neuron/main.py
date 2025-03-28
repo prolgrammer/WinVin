@@ -1,207 +1,130 @@
-import os
-import re
-import uuid
-from datetime import datetime
-from typing import Dict, List
-from fastapi import FastAPI, UploadFile, HTTPException
-from pydantic import BaseModel
-from docx import Document
 import torch
-from transformers import (
-    AutoModelForSpeechSeq2Seq,
-    AutoProcessor,
-    pipeline,
-    Pipeline
-)
-from sentence_transformers import SentenceTransformer
+import numpy as np
+from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+from fastapi import FastAPI, UploadFile, HTTPException
+import io
+import logging
+from datetime import datetime
+import uuid
+import soundfile as sf
 
-app = FastAPI(title="Call Analytics API")
+# Настройка логгера
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-DATA_DIR = "data"
-CHECKLIST_FILE = "Чек-лист.docx"
-DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
-TORCH_DTYPE = torch.float16 if torch.cuda.is_available() else torch.float32
+app = FastAPI()
 
+# Инициализация модели
+def load_model():
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
-def load_models() -> tuple[Pipeline, SentenceTransformer]:
-    """Загружает все необходимые модели"""
     model_id = "openai/whisper-large-v3"
 
-    model = AutoModelForSpeechSeq2Seq.from_pretrained(
-        model_id,
-        torch_dtype=TORCH_DTYPE,
-        low_cpu_mem_usage=True,
-        use_safetensors=True
-    ).to(DEVICE)
-
-    processor = AutoProcessor.from_pretrained(model_id)
-
-    asr_pipe = pipeline(
-        "automatic-speech-recognition",
-        model=model,
-        tokenizer=processor.tokenizer,
-        feature_extractor=processor.feature_extractor,
-        chunk_length_s=30,
-        batch_size=16,
-        torch_dtype=TORCH_DTYPE,
-        device=DEVICE,
-    )
-
-    embedder = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
-
-    return asr_pipe, embedder
-
-
-ASR_PIPE, EMBEDDER = load_models()
-SENTIMENT_MODEL = pipeline(
-    "sentiment-analysis",
-    model="blanchefort/rubert-base-cased-sentiment",
-    device=DEVICE
-)
-
-
-def parse_word_checklist(filepath: str) -> Dict:
-    doc = Document(filepath)
-    competences = {}
-    current_comp = None
-
-    for paragraph in doc.paragraphs:
-        text = paragraph.text.strip()
-        if not text:
-            continue
-
-        if text.startswith('#### Компетенция:'):
-            comp_name = text.split(':', 1)[1].strip()
-            current_comp = {
-                "name": comp_name,
-                "indicators": {},
-                "stage": None
-            }
-            competences[comp_name] = current_comp
-
-        elif text.startswith('Этап продаж:'):
-            if current_comp:
-                current_comp["stage"] = text.split(':', 1)[1].strip()
-
-        elif re.match(r'^\d+\.\s+.+:', text):
-            if current_comp:
-                parts = re.split(r'[:–-]', text, maxsplit=1)
-                if len(parts) == 2:
-                    idx_match = re.match(r'^(\d+)\.', text)
-                    if idx_match:
-                        idx = int(idx_match.group(1))
-                        indicator_text = parts[1].strip()
-                        penalty_match = re.search(r'Штрафной балл:\s*(\d+)', text)
-                        penalty = int(penalty_match.group(1)) if penalty_match else 0
-
-                        current_comp["indicators"][idx] = {
-                            "text": indicator_text,
-                            "penalty": penalty,
-                            "examples": []
-                        }
-    return competences
-
-
-def load_checklist() -> Dict:
-    filepath = os.path.join(DATA_DIR, CHECKLIST_FILE)
-    if not os.path.exists(filepath):
-        raise FileNotFoundError(f"Checklist file not found: {filepath}")
-    return parse_word_checklist(filepath)
-
-
-CHECKLIST = load_checklist()
-
-
-class AnalysisResponse(BaseModel):
-    call_id: str
-    text: str
-    sentiment: str
-    sentiment_score: float
-    competences: Dict
-    total_score: float
-    recommendations: List[str]
-    processing_time: float
-
-
-@app.post("/analyze", response_model=AnalysisResponse)
-async def analyze_call(file: UploadFile):
-    start_time = datetime.now()
-
     try:
-        temp_file = f"temp_{uuid.uuid4()}.wav"
-        with open(temp_file, "wb") as f:
-            f.write(await file.read())
+        logger.info("Загрузка модели Whisper...")
+        model = AutoModelForSpeechSeq2Seq.from_pretrained(
+            model_id,
+            torch_dtype=torch_dtype,
+            low_cpu_mem_usage=True,
+            use_safetensors=True
+        ).to(device)
 
-        result = ASR_PIPE(temp_file)
-        text = result["text"]
-        os.remove(temp_file)
+        processor = AutoProcessor.from_pretrained(model_id)
 
-        sentiment = SENTIMENT_MODEL(text)[0]
-        analysis = analyze_text(text)
-
-        recommendations = generate_recommendations(analysis)
-
-        return AnalysisResponse(
-            call_id=str(uuid.uuid4()),
-            text=text,
-            sentiment=sentiment['label'],
-            sentiment_score=sentiment['score'],
-            competences=analysis["competences"],
-            total_score=analysis["total_score"],
-            recommendations=recommendations,
-            processing_time=(datetime.now() - start_time).total_seconds()
+        pipe = pipeline(
+            "automatic-speech-recognition",
+            model=model,
+            tokenizer=processor.tokenizer,
+            feature_extractor=processor.feature_extractor,
+            torch_dtype=torch_dtype,
+            device=device,
+            chunk_length_s=30,  # Для длинных аудио
+            stride_length_s=[5, 3],  # Перекрытие между чанками
+            batch_size=8,  # Оптимально для большинства GPU
         )
 
+        logger.info("Модель успешно загружена")
+        return pipe
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Ошибка загрузки модели: {str(e)}")
+        raise
 
+# Загружаем модель при старте
+try:
+    asr_pipeline = load_model()
+except Exception as e:
+    logger.critical(f"Не удалось загрузить модель: {str(e)}")
+    raise
 
-def analyze_text(text: str) -> Dict:
-    """Анализирует текст по чек-листу"""
-    results = {"competences": {}, "total_score": 100}
-    total_penalty = 0
+@app.post("/analyze")
+async def transcribe_audio(file: UploadFile):
+    start_time = datetime.now()
+    request_id = str(uuid.uuid4())
+    logger.info(f"[{request_id}] Начало обработки запроса")
 
-    for comp_name, comp_data in CHECKLIST.items():
-        comp_results = {
-            "score": 100,
-            "indicators": {},
-            "total_penalty": 0
-        }
+    try:
+        # Проверка формата файла
+        if not file.filename.lower().endswith(('.wav', '.mp3', '.ogg', '.flac')):
+            raise HTTPException(status_code=400, detail="Неподдерживаемый формат аудио")
 
-        for idx, indicator in comp_data["indicators"].items():
-            found = indicator["text"].lower() in text.lower()
-            penalty = 0 if found else indicator["penalty"]
+        # Чтение и конвертация аудио
+        logger.info(f"[{request_id}] Чтение и конвертация аудио...")
+        audio_bytes = await file.read()
 
-            comp_results["indicators"][idx] = {
-                "found": found,
-                "penalty": penalty
-            }
-            comp_results["total_penalty"] += penalty
+        try:
+            # Конвертируем в numpy массив
+            with io.BytesIO(audio_bytes) as audio_stream:
+                audio_data, sample_rate = sf.read(audio_stream)
 
-        comp_results["score"] = max(0, 100 - comp_results["total_penalty"])
-        total_penalty += comp_results["total_penalty"]
-        results["competences"][comp_name] = comp_results
+                # Конвертируем в mono если нужно
+                if len(audio_data.shape) > 1:
+                    audio_data = np.mean(audio_data, axis=1)
 
-    results["total_score"] = max(0, 100 - total_penalty)
-    return results
+                # Нормализуем до float32
+                audio_data = audio_data.astype(np.float32)
 
+                # Подготавливаем входные данные для Whisper
+                inputs = {
+                    "raw": audio_data,
+                    "sampling_rate": sample_rate
+                }
 
-def generate_recommendations(analysis: Dict) -> List[str]:
-    """Генерирует рекомендации на основе анализа"""
-    recommendations = []
-    for comp_name, comp_data in analysis["competences"].items():
-        if comp_data["score"] < 70:
-            missing = [str(idx) for idx, ind in comp_data["indicators"].items() if not ind["found"]]
-            if missing:
-                recommendations.append(f"{comp_name}: пропущены индикаторы {', '.join(missing)}")
+                logger.info(f"[{request_id}] Запуск распознавания...")
+                result = asr_pipeline(
+                    inputs,
+                    generate_kwargs={
+                        "language": "russian",
+                        "return_timestamps": True,  # Явно включаем временные метки
+                        "task": "transcribe"  # Явно указываем задачу транскрибации
+                    }
+                )
 
-    if not recommendations:
-        recommendations.append("Отличная работа! Все ключевые показатели выполнены.")
+                # Получаем только текст без временных меток
+                text = result["text"]
+                processing_time = (datetime.now() - start_time).total_seconds()
 
-    return recommendations
+                logger.info(f"[{request_id}] Успешно распознано {len(text)} символов за {processing_time:.2f} сек")
 
+                return {
+                    "text": text,
+                    "processing_time": processing_time,
+                    "request_id": request_id
+                }
+
+        except sf.LibsndfileError as e:
+            logger.error(f"[{request_id}] Ошибка чтения аудио: {str(e)}")
+            raise HTTPException(status_code=400, detail="Некорректный аудиофайл")
+        except Exception as e:
+            logger.error(f"[{request_id}] Ошибка распознавания: {str(e)}")
+            raise HTTPException(status_code=500, detail="Ошибка обработки аудио")
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"[{request_id}] Неожиданная ошибка: {str(e)}")
+        raise HTTPException(status_code=500, detail="Внутренняя ошибка сервера")
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="0.0.0.0", port=8000)
