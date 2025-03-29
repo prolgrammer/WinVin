@@ -1,0 +1,108 @@
+body {
+    font-family: "Montserrat", sans-serif;
+    color: #FFF;
+    background-color: #E30613;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo-block {
+    width: 280px;
+}
+
+.logo-img {
+    width: 100%;
+}
+
+.menu-block {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.menu-link {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.menu-link:hover {
+    color: #363636;
+    transition: color 0.5s ease-in-out;
+}
+
+footer {
+    background-color: #363636;
+    padding: 30px 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stolb1 {
+    width: 300px;
+    margin-top: 15px;
+}
+
+.footer-logo {
+    width: 260px;
+}
+
+.footer-tel {
+    font-family: "Lexend", sans-serif;
+    font-weight: 500;
+    font-size: 20px;   
+    color: #FFF;
+    margin-top: 20px;
+}
+
+.footer-tel-desc {
+    font-family: "Lexend", sans-serif;
+    font-weight: 500;
+    font-size: 15px;   
+    color: #FFF;
+}
+
+.stolb2 {
+    width: 700px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stolb3 {
+    width: 42px;
+    margin-top: 20px;
+}
+
+.service {
+    width: 200px;
+}
+
+.service-bold {
+    font-family: "Lexend", sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: #FFF;
+}
+
+.service-text {
+    font-family: "Lexend", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #FFF;    
+}
+
+.footer-img {
+    width: 42px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}

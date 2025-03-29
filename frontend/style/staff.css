@@ -1,0 +1,76 @@
+main {
+    padding: 50px 100px;
+    background-color: #FFF;
+}
+
+.title-container {
+    text-align: center;
+}
+
+.title-text {
+    font-family: "Lexend", sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+    text-transform: uppercase;
+    color: #E30613;
+    text-shadow: 2px 2px #363636;
+}
+
+.staff {
+    margin-top: 50px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.staff-card {
+    padding: 5px 15px;
+    width: 45%;
+    display: flex;
+    justify-content: space-between;
+    border: #E30613 2px solid;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.staff-img-container {
+    width: 250px;
+}
+
+.staff-img {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.staff-desc {
+    margin-top: 20px;
+    width: calc(100% - 270px);
+}
+
+.people-name {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: #E30613;
+}
+
+.people-desc {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #363636;
+    line-height: 50px;
+}
+
+.people-red {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #E30613;
+    line-height: 50px;
+}
+

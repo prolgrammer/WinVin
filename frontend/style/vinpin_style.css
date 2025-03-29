@@ -1,41 +1,3 @@
-body {
-    font-family: "Montserrat", sans-serif;
-    color: #FFF;
-    background-color: #E30613;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    padding: 50px 100px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.logo-block {
-    width: 292px;
-}
-
-.logo-img {
-    width: 100%;
-}
-
-.menu-block {
-    width: 50%;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.menu-link {
-    font-family: "Lexend", sans-serif;
-    font-weight: 600;
-    font-size: 28px;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #FFF;
-}
-
 .passport-block {
     background-color: #FFF;
     padding: 50px 100px;
@@ -56,14 +18,15 @@ header {
 }
 
 .people-name {
-    font-family: "Montserrat";
+    font-family: "Montserrat", sans-serif;
     font-weight: 600;
     font-size: 40px;
     color: #E30613;
+    margin-bottom: 20px;
 }
 
 .people-desc {
-    font-family: "Montserrat";
+    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 23px;
     color: #363636;
@@ -71,9 +34,70 @@ header {
 }
 
 .people-red {
-    font-family: "Montserrat";
+    font-family: "Montserrat", sans-serif;
     font-weight: 700;
     font-size: 23px;
     color: #E30613;
     line-height: 50px;
 }
+
+.calls-block {
+    padding: 50px 100px;
+}
+
+.title-container {
+    text-align: center;
+}
+
+.title-text {
+    font-family: "Lexend", sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+    text-transform: uppercase;
+    text-shadow: 4px 4px #363636;
+}
+
+.table-block {
+    margin-top: 50px;
+}
+
+.table {
+    width: 100%;
+    border: 2px solid #E30613;
+    border-collapse: collapse;
+    background-color: #FFF;
+    font-family: "Montserrat", sans-serif;
+    border-radius: 20px;
+}
+
+.table th, 
+.table td {
+    border: 3px solid #E30613;
+    padding: 25px 7px;
+    text-align: center;
+}
+
+.table-header {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    text-align: center;
+    text-transform: uppercase;  
+    color: #E30613;  
+}
+
+.table-text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;  
+    color:#363636;
+}
+
+.graph {
+    background-color: #FFF;
+    padding: 50px 100px;
+    height: 400px;
+    /* ВЫСОТУ ПОТОМ УБРАТЬ!!! */
+}
+

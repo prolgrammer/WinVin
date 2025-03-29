@@ -1,0 +1,64 @@
+.banner {
+    display: flex;
+    padding-left: 100px;
+}
+
+.banner-text-container {
+    width: 770px;
+}
+
+.banner-img-container {
+    position: absolute;
+    z-index: 10;
+    top: 104px;
+    right: 0;
+}
+
+.banner-1 {
+    width: 770px;
+    margin-top: 50px;
+}
+
+.banner-1-text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    color: #FFF;
+}
+
+.banner-2 {
+    width: 572px;
+    margin-top: 40px;
+}
+
+.banner-2-text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #FFF;
+}
+
+.banner-3 {
+    width: 292px;
+    margin-top: 80px;
+}
+
+.banner-3-img {
+    width: 100%;
+}
+
+.banner-4 {
+    margin-top: 25px;
+    margin-bottom: 70px;
+}
+
+.banner-4-text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 900;
+    font-size: 30px;
+    color: #FFF;
+}
+
+.robot-img {
+    width: 800px;
+}

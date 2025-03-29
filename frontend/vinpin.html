@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VINPIN</title>
+    <link rel="stylesheet" href="style/const.css">
     <link rel="stylesheet" href="style/vinpin_style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,12 +13,12 @@
 <body>
     <header>
         <div class="logo-block">
-            <img src="img/logo.png" alt="VINPIN" class="logo-img">
+            <a href="index.html"><img src="img/logo.png" alt="VINPIN" class="logo-img"></a>
         </div>
         <div class="menu-block">
-            <a href="#" class="menu-link">Главная</a>
-            <a href="#" class="menu-link">Сотрудники</a>
-            <a href="#" class="menu-link">Аналитика</a>
+            <a href="index.html" class="menu-link">Главная</a>
+            <a href="staff.html" class="menu-link">Сотрудники</a>
+            <a href="analitics.html" class="menu-link">Аналитика</a>
         </div>
     </header>
     <main>
@@ -28,24 +29,102 @@
             <div class="passport-desk">
                 <span class="people-name">ИИИИ ИИИИИИИ ИИИИИИ</span>
                 <br>
-                <span class="people-desc">Начало работы:</span><span class="people-work people-red"></span>
+                <span class="people-desc">Начало работы:</span><span class="people-work"></span>
                 <br>
-                <span class="people-desc">Должность:</span><span class="people-work people-red"></span>
+                <span class="people-desc">Должность:</span><span class="people-work"></span>
                 <br>
                 <span class="people-desc">Количество звонков:</span><span class="people-calls-count people-red"></span>
                 <br>
-                <span class="people-desc">Процент успешных звонков:</span><span class="people-success people-red"></span>
+                <span class="people-desc">Процент успешных звонков:</span><span class="people-success people-red"></span><span class="people-red">%</span>
                 <br>
                 <span class="people-desc">Средняя продолжительность разговора:</span><span class="people-duration people-red"></span>
                 <br>
                 <span class="people-desc">Эмоциональный индекс:</span><span class="people-index people-red"></span>
                 <br>
-                <span class="people-desc">Баллы:</span><span class="people-scores people-red"></span>
+                <span class="people-desc">Средний балл:</span><span class="people-scores people-red"></span>
                 <br>
-                <span class="people-desc">Рекомендации:</span><span class="people-recom people-red"></span>
+                <span class="people-desc">Рекомендации:</span><span class="people-recom"></span>
             </div>
         </div>
+        <div class="calls-block">
+            <div class="title-container">
+                <span class="title-text">Истории звонков</span>
+            </div>
+            <div class="table-block">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="table-header">Запись</th>
+                            <th class="table-header">Дата и время</th>
+                            <th class="table-header">Телефон</th>
+                            <th class="table-header">Продолжи-<br>тельность</th>
+                            <th class="table-header">Эмоциональ-<br>ный индекс</th>
+                            <th class="table-header">Балл</th>
+                            <th class="table-header">Рекомендация</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="table-text">Запись 1.mp3</td>
+                            <td class="table-text">15.05.2023 14:30</td>
+                            <td class="table-text">+7 (123) 456-7890</td>
+                            <td class="table-text">2:45</td>
+                            <td class="table-text">0.78</td>
+                            <td class="table-text">85</td>
+                            <td class="table-text">Перезвонить</td>
+                        </tr>
+                        <tr>
+                            <td class="table-text">Запись 2.mp3</td>
+                            <td class="table-text">16.05.2023 10:15</td>
+                            <td class="table-text">+7 (987) 654-3210</td>
+                            <td class="table-text">1:30</td>
+                            <td class="table-text">0.45</td>
+                            <td class="table-text">62</td>
+                            <td class="table-text">Отправить email</td>
+                        </tr>
+                        <tr>
+                            <td class="table-text">Запись 3.mp3</td>
+                            <td class="table-text">17.05.2023 16:45</td>
+                            <td class="table-text">+7 (555) 123-4567</td>
+                            <td class="table-text">4:20</td>
+                            <td class="table-text">0.92</td>
+                            <td class="table-text">95</td>
+                            <td class="table-text">Высокий приоритет</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="graph">
+
+        </div>
     </main>
+    <footer>
+        <div class="stolb1">
+            <img src="img/footer-logo.png" alt="" class="footer-logo">
+            <p class="footer-tel">8 (800) 333-08-32 </p>
+            <p class="footer-tel-desc">Бесплатно для звонков<br>по России</p>
+        </div>
+        <div class="stolb2">
+            <div class="service">
+                <p class="service-bold">VINPIN Каталоги</p>
+                <p class="service-text">360 дилерских каталога подбора кода запчасти по VIP-коду</p>
+            </div>
+            <div class="service">
+                <p class="service-bold">VINPIN CRM</p>
+                <p class="service-text">Система управления (CRM) автосервисом или автомагазином</p>
+            </div>
+            <div class="service">
+                <p class="service-bold">VINPIN СТО</p>
+                <p class="service-text">Лучшие программы для автосервисов</p>
+            </div>
+        </div>
+        <div class="stolb3">
+            <img src="img/tg.png" alt="" class="footer-img">
+            <img src="img/mail.png" alt="" class="footer-img">
+            <img src="img/youtube.png" alt="" class="footer-img">
+        </div>
+    </footer>
     <script src="scripts/vinpin.js"></script>
 </body>
 </html>
