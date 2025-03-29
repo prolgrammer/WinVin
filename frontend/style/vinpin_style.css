@@ -1,0 +1,79 @@
+body {
+    font-family: "Montserrat", sans-serif;
+    color: #FFF;
+    background-color: #E30613;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    padding: 50px 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo-block {
+    width: 292px;
+}
+
+.logo-img {
+    width: 100%;
+}
+
+.menu-block {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.menu-link {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.passport-block {
+    background-color: #FFF;
+    padding: 50px 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.passport-img-block {
+    width: 35%;
+}
+
+.passport-img {
+    width: 100%;
+}
+
+.passport-desk {
+    width: 55%;
+}
+
+.people-name {
+    font-family: "Montserrat";
+    font-weight: 600;
+    font-size: 40px;
+    color: #E30613;
+}
+
+.people-desc {
+    font-family: "Montserrat";
+    font-weight: 500;
+    font-size: 23px;
+    color: #363636;
+    line-height: 50px;
+}
+
+.people-red {
+    font-family: "Montserrat";
+    font-weight: 700;
+    font-size: 23px;
+    color: #E30613;
+    line-height: 50px;
+}
